@@ -7,6 +7,7 @@ curl_global_init(CURL_GLOBAL_ALL)
 // curl types covers
 CURLoption: extern cover
 CURLcode: extern cover
+CURLformoption: extern cover
 
 // curl global functions covers
 CURL_GLOBAL_ALL: extern Long
@@ -97,18 +98,33 @@ CurlOpt: cover {
     proxyPassword:           extern(CURLOPT_PROXYPASSWORD)              static CURLoption
     httpAuth:                extern(CURLOPT_HTTPAUTH)                   static CURLoption
     proxyAuth:               extern(CURLOPT_PROXYAUTH)                  static CURLoption
-    
+
+    /* form/multipart options */
+    httpPost:                extern(CURLOPT_HTTPPOST)                   static CURLoption   
 }
 
+/**
+ * Curl form options
+ */
+CurlForm: cover {
+    copyName: extern(CURLFORM_COPYNAME) static CURLformoption
+    ptrName: extern(CURLFORM_PTRNAME) static CURLformoption
+    copyContents: extern(CURLFORM_COPYCONTENTS) static CURLformoption
+    ptrContents: extern(CURLFORM_PTRCONTENTS) static CURLformoption
+    contentsLength: extern(CURLFORM_CONTENTSLENGTH) static CURLformoption
+    fileContent: extern(CURLFORM_FILECONTENT) static CURLformoption
+    file: extern(CURLFORM_FILE) static CURLformoption
+    contentType: extern(CURLFORM_CONTENTTYPE) static CURLformoption
+    fileName: extern(CURLFORM_FILENAME) static CURLformoption
+    buffer: extern(CURLFORM_BUFFER) static CURLformoption
+    bufferPtr: extern(CURLFORM_BUFFERPTR) static CURLformoption
+    bufferLength: extern(CURLFORM_BUFFERLENGTH) static CURLformoption
+    stream: extern(CURLFORM_STREAM) static CURLformoption
+    array: extern(CURLFORM_ARRAY) static CURLformoption
+    contentHeader: extern(CURLFORM_CONTENTHEADER) static CURLformoption
+    end: extern(CURLFORM_END) static CURLformoption
+}
 
-
-
-
-
-
-
-
-
-
-
-
+HTTPPost: cover from struct curl_httppost*
+formAdd: extern(curl_formadd) func (firstitem, lastitem: HTTPPost*, ...) -> Int
+formFree: extern(curl_formfree) func (form: HTTPPost) -> Int
