@@ -21,6 +21,7 @@ Curl: cover from CURL* {
     new: extern(curl_easy_init) static func -> This
     setOpt: extern(curl_easy_setopt) func (CURLoption, ...)
     perform: extern(curl_easy_perform) func -> Int
+    cleanup: extern(curl_easy_cleanup) func
 
 }
 

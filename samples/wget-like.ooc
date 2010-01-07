@@ -21,6 +21,7 @@ main: func (args: Array<String>) {
     })
 
     handle perform()
+    handle cleanup()
     fw close()
 
 }
