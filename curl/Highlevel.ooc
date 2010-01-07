@@ -70,7 +70,6 @@ HTTPRequest: class {
         if(post)
             post free()
         curl cleanup()
-        "yo" println()
     }
 
     init: func ~writeToBuffer (url: String) {
