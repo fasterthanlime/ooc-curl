@@ -84,7 +84,7 @@ HTTPRequest: class {
     setWriter: func (=writer) {}
     setPost: func (=post) {}
 
-    perform: func {
+    perform: func -> Int {
         if(post)
             curl setOpt(CurlOpt httpPost, post)
         curl perform()
