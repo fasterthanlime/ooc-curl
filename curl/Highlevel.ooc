@@ -85,11 +85,21 @@ HTTPRequest: class {
 
     perform: func -> Int {
         if(post)
-            curl setOpt(CurlOpt httpPost, post)
+            curl setOpt(CurlOpt httpPost, post post)
         curl perform()
     }
 
     getString: func -> String {
         writer as StringBuffer toString()
+    }
+
+    /** methods for later (after perform) */
+    
+    /** return the HTTP/FTP response code. Will be 0 if
+     * no server response code has been received. */
+    getResponseCode: func -> Long {
+        ret: Long
+        curl getInfo(CurlInfo responseCode, ret&)
+        ret
     }
 }

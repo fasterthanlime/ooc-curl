@@ -8,6 +8,7 @@ curl_global_init(CURL_GLOBAL_ALL)
 CURLoption: extern cover
 CURLcode: extern cover
 CURLformoption: extern cover
+CURLINFO: extern cover
 
 // curl global functions covers
 CURL_GLOBAL_ALL: extern Long
@@ -22,6 +23,7 @@ Curl: cover from CURL* {
     setOpt: extern(curl_easy_setopt) func (CURLoption, ...)
     perform: extern(curl_easy_perform) func -> Int
     cleanup: extern(curl_easy_cleanup) func
+    getInfo: extern(curl_easy_getinfo) func (CURLINFO, ...)
 
 }
 
@@ -129,3 +131,10 @@ CurlForm: cover {
 HTTPPost: cover from struct curl_httppost*
 formAdd: extern(curl_formadd) func (firstitem, lastitem: HTTPPost*, ...) -> Int
 formFree: extern(curl_formfree) func (form: HTTPPost) -> Int
+
+/** CurlInfo for curl_easy_getinfo */
+CurlInfo: cover {
+    effectiveUrl: extern(CURLINFO_EFFECTIVE_URL) static CURLINFO
+    responseCode: extern(CURLINFO_RESPONSE_CODE) static CURLINFO
+    /* TODO: wrap */
+}
