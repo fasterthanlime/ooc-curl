@@ -76,6 +76,17 @@ HTTPRequest: class {
         init(url, Buffer new())
     }
 
+    setHeader: func (header: String) {
+        slist := CurlSList new()
+        slist append(header)
+        curl setOpt(CurlOpt httpHeader, slist)
+        slist free()
+    }
+    
+    setHeader: func ~keyValue (key, value: String) {
+        setHeader("%s: %s" format(key, value))
+    }
+
     setUrl: func (url: String) {
         curl setOpt(CurlOpt url, url)
     }

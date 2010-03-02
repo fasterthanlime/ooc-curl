@@ -28,15 +28,24 @@ Curl: cover from CURL* {
 }
 
 /**
+ * CURL linked lists
+ */
+CurlSList: cover from struct curl_slist* {
+    new: static func -> This { null }
+    append: extern(curl_slist_append) func (s: String)
+    free: extern(curl_slist_free_all) func
+}
+
+/**
  * CURL options.
  */
 CurlOpt: cover {
     
     /* behavior options */
-    verbose:    extern(CURLOPT_VERBOSE)   static CURLoption
-    header:     extern(CURLOPT_HEADER)    static CURLoption
-    noProgress: extern(CURLOPT_HEADER)    static CURLoption
-    noSignal:   extern(CURLOPT_NOSIGNAL)  static CURLoption
+    verbose:    extern(CURLOPT_VERBOSE)    static CURLoption
+    header:     extern(CURLOPT_HEADER)     static CURLoption
+    noProgress: extern(CURLOPT_NOPROGRESS) static CURLoption
+    noSignal:   extern(CURLOPT_NOSIGNAL)   static CURLoption
     
     /* callback options */
     writeFunction:           extern(CURLOPT_WRITEFUNCTION)              static CURLoption
@@ -104,6 +113,9 @@ CurlOpt: cover {
 
     /* form/multipart options */
     httpPost:                extern(CURLOPT_HTTPPOST)                   static CURLoption   
+    
+    /* HTTP options */
+    httpHeader:              extern(CURLOPT_HTTPHEADER)                 static CURLoption
 }
 
 /**
