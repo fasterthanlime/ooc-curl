@@ -1,5 +1,5 @@
 import io/Writer
-import text/StringBuffer
+import text/Buffer
 import structs/HashMap
 
 import curl/Curl
@@ -73,7 +73,7 @@ HTTPRequest: class {
     }
 
     init: func ~writeToBuffer (url: String) {
-        init(url, StringBuffer new())
+        init(url, Buffer new())
     }
 
     setUrl: func (url: String) {
@@ -90,7 +90,7 @@ HTTPRequest: class {
     }
 
     getString: func -> String {
-        writer as StringBuffer toString()
+        writer as Buffer toString()
     }
 
     /** methods for later (after perform) */

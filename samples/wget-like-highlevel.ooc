@@ -1,6 +1,6 @@
 use curl
 import curl/Highlevel
-import io/FileWriter, structs/Array, text/StringBuffer
+import io/FileWriter, structs/Array, text/Buffer
 
 main: func (args: Array<String>) {
 
