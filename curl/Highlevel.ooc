@@ -1,6 +1,6 @@
 import io/Writer
 import text/Buffer
-import structs/HashMap
+import structs/[HashMap, List, ArrayList]
 
 import curl/Curl
 
@@ -54,10 +54,10 @@ FormData: class {
 HTTPRequest: class {
     curl: Curl
     writer: Writer
-    post: FormData
+    formData: FormData = null
+    headers: List<String>
 
     init: func (url: String, =writer) {
-        post = null
         curl = Curl new()
         curl setOpt(CurlOpt writeData, this)
         curl setOpt(CurlOpt writeFunction, func (buffer: Pointer, size, nmemb: SizeT, self: HTTPRequest) {
@@ -67,24 +67,32 @@ HTTPRequest: class {
     }
 
     __destroy__: func {
-        if(post)
-            post free()
+        if(formData)
+            formData free()
         curl cleanup()
     }
 
     init: func ~writeToBuffer (url: String) {
-        init(url, Buffer new())
-    }
-
-    setHeader: func (header: String) {
-        slist := CurlSList new()
-        slist append(header)
-        curl setOpt(CurlOpt httpHeader, slist)
-        slist free()
+        init(url, BufferWriter new())
     }
     
-    setHeader: func ~keyValue (key, value: String) {
-        setHeader("%s: %s" format(key, value))
+    /**
+     * Make this a POST request, and set its content
+     */
+    post: func ~fullContent (content: String) {
+        curl setOpt(CurlOpt post, true)
+        curl setOpt(CurlOpt postFields, content)
+    }
+
+    header: func (header: String) {
+        if(!headers) {
+            headers = ArrayList<String> new()
+        }
+        headers add(header)
+    }
+    
+    header: func ~keyValue (key, value: String) {
+        header("%s: %s" format(key, value))
     }
 
     setUrl: func (url: String) {
@@ -92,16 +100,34 @@ HTTPRequest: class {
     }
 
     setWriter: func (=writer) {}
-    setPost: func (=post) {}
+    setFormData: func (=formData) {}
 
     perform: func -> Int {
-        if(post)
-            curl setOpt(CurlOpt httpPost, post post)
-        curl perform()
+        if(formData) {
+            curl setOpt(CurlOpt httpPost, formData post)
+        }
+            
+        slist : CurlSList = null
+        if(headers) {
+            slist := CurlSList new()
+            for(header: String in headers) {
+                printf("Adding header || %s\n", header)
+                slist = slist append(header)
+            }
+            curl setOpt(CurlOpt httpHeader, slist)
+        }
+        
+        result := curl perform()
+        
+        if(headers) {
+            slist free()
+        }
+        
+        result
     }
 
     getString: func -> String {
-        writer as Buffer toString()
+        writer as BufferWriter buffer() toString()
     }
 
     /** methods for later (after perform) */
@@ -113,4 +139,5 @@ HTTPRequest: class {
         curl getInfo(CurlInfo responseCode, ret&)
         ret
     }
+
 }

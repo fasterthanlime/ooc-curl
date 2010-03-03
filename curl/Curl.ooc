@@ -32,7 +32,7 @@ Curl: cover from CURL* {
  */
 CurlSList: cover from struct curl_slist* {
     new: static func -> This { null }
-    append: extern(curl_slist_append) func (s: String)
+    append: extern(curl_slist_append) func (s: String) -> This
     free: extern(curl_slist_free_all) func
 }
 
@@ -110,6 +110,10 @@ CurlOpt: cover {
     proxyPassword:           extern(CURLOPT_PROXYPASSWORD)              static CURLoption
     httpAuth:                extern(CURLOPT_HTTPAUTH)                   static CURLoption
     proxyAuth:               extern(CURLOPT_PROXYAUTH)                  static CURLoption
+
+    /* post options */
+    post:                    extern(CURLOPT_POST)                       static CURLoption
+    postFields:              extern(CURLOPT_POSTFIELDS)                 static CURLoption
 
     /* form/multipart options */
     httpPost:                extern(CURLOPT_HTTPPOST)                   static CURLoption   
