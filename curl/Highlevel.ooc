@@ -43,7 +43,7 @@ FormData: class {
     }
 
     addFromHashMap: func (map: HashMap<String, String>) {
-        for(key: String in map keys) {
+        for(key: String in map getKeys()) {
             addField(key, map[key])
         }
     }
