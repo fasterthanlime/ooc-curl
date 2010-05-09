@@ -12,7 +12,7 @@ FormData: class {
         last = null
     }
 
-    init: func ~fromHashMap (map: HashMap<String>) {
+    init: func ~fromHashMap (map: HashMap<String, String>) {
         init()
         addFromHashMap(map)
     }
@@ -42,8 +42,8 @@ FormData: class {
         formFree(post)
     }
 
-    addFromHashMap: func (map: HashMap<String>) {
-        for(key: String in map keys) {
+    addFromHashMap: func (map: HashMap<String, String>) {
+        for(key: String in map getKeys()) {
             addField(key, map[key])
         }
     }
