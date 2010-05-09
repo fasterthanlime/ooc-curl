@@ -1,9 +1,6 @@
 use curl
 include curl/curl, curl/easy
 
-// code executed at startup:
-curl_global_init(CURL_GLOBAL_ALL)
-
 // curl types covers
 CURLoption: extern cover
 CURLcode: extern cover
@@ -13,6 +10,9 @@ CURLINFO: extern cover
 // curl global functions covers
 CURL_GLOBAL_ALL: extern Long
 curl_global_init: extern func (Long)
+
+// code executed at startup:
+curl_global_init(CURL_GLOBAL_ALL)
 
 /**
  * CURL easy handle
