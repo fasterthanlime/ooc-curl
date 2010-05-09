@@ -1,8 +1,8 @@
 use curl
 import curl/Highlevel
-import io/FileWriter, structs/Array, text/Buffer
+import io/FileWriter, structs/ArrayList, text/Buffer
 
-main: func (args: Array<String>) {
+main: func (args: ArrayList<String>) {
 
     if(args size() <= 1) {
         printf("Usage: %s URL [DESTINATION]\n", args[0])
