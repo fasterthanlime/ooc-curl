@@ -29,7 +29,7 @@ FormData: class {
         formAdd(post&, last&, \
                 CurlForm copyName, key, \
                 CurlForm file, sendFilename, \
-                CurlForm fileName, localFilename, 
+                CurlForm fileName, localFilename,
                 CurlForm contentType, contentType, \
                 CurlForm end)
     }
@@ -75,7 +75,7 @@ HTTPRequest: class {
     init: func ~writeToBuffer (url: String) {
         init(url, BufferWriter new())
     }
-    
+
     /**
      * Make this a POST request, and set its content
      */
@@ -90,7 +90,7 @@ HTTPRequest: class {
         }
         headers add(header)
     }
-    
+
     header: func ~keyValue (key, value: String) {
         header("%s: %s" format(key, value))
     }
@@ -106,7 +106,7 @@ HTTPRequest: class {
         if(formData) {
             curl setOpt(CurlOpt httpPost, formData post)
         }
-            
+
         slist : CurlSList = null
         if(headers) {
             slist := CurlSList new()
@@ -116,13 +116,13 @@ HTTPRequest: class {
             }
             curl setOpt(CurlOpt httpHeader, slist)
         }
-        
+
         result := curl perform()
-        
+
         if(headers) {
             slist free()
         }
-        
+
         result
     }
 
@@ -130,8 +130,8 @@ HTTPRequest: class {
         writer as BufferWriter buffer() toString()
     }
 
-    /** methods for later (after perform) */
-    
+    /* methods for later (after perform) */
+
     /** return the HTTP/FTP response code. Will be 0 if
      * no server response code has been received. */
     getResponseCode: func -> Long {
