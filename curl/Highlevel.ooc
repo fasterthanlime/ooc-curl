@@ -26,11 +26,11 @@ FormData: class {
     }
 
     addFieldFile: func ~withContentTypeWithLocalFilename (key, localFilename, sendFilename, contentType: String) {
-        formAdd(post&, last&, \
-                CurlForm copyName, key, \
-                CurlForm file, sendFilename, \
+        formAdd(post&, last&,
+                CurlForm copyName, key,
+                CurlForm file, sendFilename,
                 CurlForm fileName, localFilename,
-                CurlForm contentType, contentType, \
+                CurlForm contentType, contentType,
                 CurlForm end)
     }
 
