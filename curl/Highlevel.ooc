@@ -1,5 +1,4 @@
-import io/Writer
-import text/Buffer
+import io/[Writer, BufferWriter]
 import structs/[HashMap, List, ArrayList]
 
 import curl/Curl
@@ -96,7 +95,7 @@ HTTPRequest: class {
     }
 
     setUrl: func (url: String) {
-        curl setOpt(CurlOpt url, url)
+        curl setOpt(CurlOpt url, url toCString())
     }
 
     setWriter: func (=writer) {}
