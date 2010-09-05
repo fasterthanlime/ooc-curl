@@ -9,10 +9,15 @@ CURLINFO: extern cover
 
 // curl global functions covers
 CURL_GLOBAL_ALL: extern Long
-curl_global_init: extern func (Long)
+curl_global_init: extern func (flags: Long)
+curl_global_init_mem: extern func (flags: Long, malloc, free, realloc, strdup, calloc: Pointer)
 
 // code executed at startup:
-curl_global_init(CURL_GLOBAL_ALL)
+version(gc) {
+    curl_global_init_mem(CURL_GLOBAL_ALL, gc_malloc, gc_free, gc_realloc, gc_strdup, gc_calloc)
+} else {
+    curl_global_init(CURL_GLOBAL_ALL)
+}
 
 /**
  * CURL easy handle
