@@ -30,6 +30,18 @@ Curl: cover from CURL* {
     cleanup: extern(curl_easy_cleanup) func
     getInfo: extern(curl_easy_getinfo) func (CURLINFO, ...)
 
+    escape: extern(curl_easy_escape) static func ~lowlevel (Curl, CString, Int) -> CString
+    escape: static func (url: String) -> String {
+        escape(null, url toCString(), url size) toString()
+    }
+    
+    unescape: extern(curl_easy_unescape) static func ~lowlevel (Curl, CString, Int, Int*) -> CString
+    unescape: static func (url: String) -> String {
+        outlength: Int
+        cstr := unescape(null, url toCString(), url size, outlength&)
+        String new(cstr, outlength)
+    }
+    
 }
 
 /**
