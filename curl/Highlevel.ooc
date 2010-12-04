@@ -56,12 +56,14 @@ HTTPRequest: class {
     formData: FormData = null
     headers: List<String>
 
+    defaultWriteFunction: static func (buffer: Pointer, size, nmemb: SizeT, self: HTTPRequest) {
+        self writer write(buffer, nmemb)
+    }
+
     init: func (url: String, =writer) {
         curl = Curl new()
         curl setOpt(CurlOpt writeData, this)
-        curl setOpt(CurlOpt writeFunction, func (buffer: Pointer, size, nmemb: SizeT, self: HTTPRequest) {
-            self writer write(buffer, nmemb)
-        })
+        curl setOpt(CurlOpt writeFunction, defaultWriteFunction)
         setUrl(url)
     }
 
