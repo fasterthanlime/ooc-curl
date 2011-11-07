@@ -4,4 +4,4 @@ Version: head
 Variant: src
 Origin: git://github.com/nddrylliog/ooc-curl.git
 Pkgs: libcurl
-SourcePath: .
+SourcePath: source
