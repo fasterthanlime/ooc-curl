@@ -5,7 +5,7 @@ import io/FileWriter, structs/ArrayList, text/Buffer
 main: func (args: ArrayList<String>) {
 
     if(args size() <= 1) {
-        printf("Usage: %s URL [DESTINATION]\n", args[0])
+        "Usage: %s URL [DESTINATION]" printfln(args[0])
         exit(0)
     }
     url := args get(1)
