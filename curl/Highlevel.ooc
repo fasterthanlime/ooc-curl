@@ -17,24 +17,24 @@ FormData: class {
     }
 
     addField: func (key, value: String) {
-        formAdd(post&, last&, CurlForm copyName, key, CurlForm copyContents, value, CurlForm end)
+        formAdd(post&, last&, CurlForm copyName, key toCString(), CurlForm copyContents, value toCString(), CurlForm end)
     }
 
     addFieldFileContent: func (key, filename: String) {
-        formAdd(post&, last&, CurlForm copyName, key, CurlForm fileContent, filename, CurlForm end)
+        formAdd(post&, last&, CurlForm copyName, key toCString(), CurlForm fileContent, filename toCString(), CurlForm end)
     }
 
     addFieldFile: func ~withContentTypeWithLocalFilename (key, localFilename, sendFilename, contentType: String) {
         formAdd(post&, last&,
-                CurlForm copyName, key,
-                CurlForm file, sendFilename,
-                CurlForm fileName, localFilename,
-                CurlForm contentType, contentType,
+                CurlForm copyName, key toCString(),
+                CurlForm file, sendFilename toCString(),
+                CurlForm fileName, localFilename toCString(),
+                CurlForm contentType, contentType toCString(),
                 CurlForm end)
     }
 
     addFieldFile: func ~lazy (key, filename: String) {
-        formAdd(post&, last&, CurlForm copyName, key, CurlForm file, filename, CurlForm end)
+        formAdd(post&, last&, CurlForm copyName, key toCString(), CurlForm file, filename toCString(), CurlForm end)
     }
 
     free: func {
@@ -82,7 +82,7 @@ HTTPRequest: class {
      */
     post: func ~fullContent (content: String) {
         curl setOpt(CurlOpt post, true)
-        curl setOpt(CurlOpt postFields, content)
+        curl setOpt(CurlOpt postFields, content toCString())
     }
 
     header: func (header: String) {
@@ -108,12 +108,12 @@ HTTPRequest: class {
             curl setOpt(CurlOpt httpPost, formData post)
         }
 
-        slist : CurlSList = null
+        slist: CurlSList
         if(headers) {
-            slist := CurlSList new()
+            slist = CurlSList new()
             for(header: String in headers) {
-                printf("Adding header || %s\n", header)
-                slist = slist append(header)
+                "Adding header || %s" printfln(header)
+                slist = slist append(header toCString())
             }
             curl setOpt(CurlOpt httpHeader, slist)
         }

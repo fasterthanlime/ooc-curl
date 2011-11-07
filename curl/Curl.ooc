@@ -47,9 +47,9 @@ Curl: cover from CURL* {
 /**
  * CURL linked lists
  */
-CurlSList: cover from struct curl_slist* {
+CurlSList: cover from Pointer { // should be curl_slist
     new: static func -> This { null }
-    append: extern(curl_slist_append) func (s: String) -> This
+    append: extern(curl_slist_append) func (s: CString) -> This
     free: extern(curl_slist_free_all) func
 }
 
