@@ -3,6 +3,14 @@ import structs/[HashMap, List, ArrayList]
 
 import curl/Curl
 
+HTTP: class {
+    get: static func (url: String) -> String {
+      http := HTTPRequest new(url)
+      http perform()
+      http getString()
+    }
+}
+
 FormData: class {
     post, last: HTTPPost
 
