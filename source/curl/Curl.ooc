@@ -1,6 +1,8 @@
 use curl
 include curl/curl, curl/easy
 
+import net/berkeley
+
 // curl types covers
 CURLoption: extern cover
 CURLcode: extern cover
@@ -170,4 +172,73 @@ CurlInfo: cover {
     effectiveUrl: extern(CURLINFO_EFFECTIVE_URL) static CURLINFO
     responseCode: extern(CURLINFO_RESPONSE_CODE) static CURLINFO
     /* TODO: wrap */
+}
+
+CURLMcode: extern cover
+
+MultiMsgType: enum {
+    none
+    done
+    last
+}
+
+_MultiMsgData: cover { // TODO: really a union
+    whatever: Pointer
+    result: Int // TODO
+}
+
+MultiMsg: cover from CURLMsg {
+    msg: MultiMsgType
+    easyHandle: extern(easy_handle) Curl
+    data: _MultiMsgData
+}
+
+CURLSocket: extern(curl_socket_t) cover
+CURLMoption: extern cover
+MultiErrorCode: enum {
+    callMultiPerform = -1
+    ok = 0
+    badHandle
+    badEasyHandle
+    outOfMemory
+    internalError
+    badSocket
+    unknownOption
+    last
+}
+
+Poll: enum {
+    none = 0
+    in = 1
+    out = 2
+    inout = 3
+    remove = 4
+}
+
+MultiOpt: cover {
+    socketFunction: extern(CURLMOPT_SOCKETFUNCTION) static CURLMoption
+    socketData: extern(CURLMOPT_SOCKETDATA) static CURLMoption
+    pipelining: extern(CURLMOPT_PIPELINING) static CURLMoption
+    timerFunction: extern(CURLMOPT_TIMERFUNCTION) static CURLMoption
+    timerData: extern(CURLMOPT_TIMERDATA) static CURLMoption
+    maxConnects: extern(CURLMOPT_MAXCONNECTS) static CURLMoption
+}
+
+CURL_SOCKET_TIMEOUT: extern Long
+
+Multi: cover from CURLM* {
+    new: extern(curl_multi_init) static func -> This
+    addHandle: extern(curl_multi_add_handle) func (Curl) -> MultiErrorCode
+    removeHandle: extern(curl_multi_remove_handle) func (Curl) -> MultiErrorCode
+    fdset: extern(curl_multi_fdset) func (FdSet*, FdSet*, FdSet*, Int*) -> MultiErrorCode
+    perform: extern(curl_multi_perform) func (Int*) -> MultiErrorCode
+    cleanup: extern(curl_multi_cleanup) func -> MultiErrorCode
+    infoRead: extern(curl_multi_info_read) func (Int*) -> MultiMsg*
+    strerror: extern(curl_multi_strerror) static func (MultiErrorCode) -> Char*
+    setOpt: extern(curl_multi_setopt) func (CURLMoption, ...) -> MultiErrorCode
+    assign: extern(curl_multi_assign) func (CURLSocket, Pointer) -> MultiErrorCode
+    timeout: extern(curl_multi_timeout) func (Long*) -> MultiErrorCode
+    socket: extern(curl_multi_socket) func(CURLSocket, Int*) -> MultiErrorCode
+    socketAction: extern(curl_multi_socket_action) func(CURLSocket, Int, Int*) -> MultiErrorCode
+    socketAll: extern(curl_multi_socket_all) func(Int*) -> MultiErrorCode
 }
