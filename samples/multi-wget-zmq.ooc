@@ -13,7 +13,7 @@ zloop := Loop new()
 listeners := HashMap<Int, LoopCallback> new()
 ztimer: LoopCallback
 
-remaining: Int
+remaining: Int = -1
 
 writecb: func (buffer: Pointer, size: SizeT, nmemb: SizeT, fw: FileWriter) {
     fw write(buffer as CString, nmemb)
@@ -21,7 +21,7 @@ writecb: func (buffer: Pointer, size: SizeT, nmemb: SizeT, fw: FileWriter) {
 
 /** see if there are any finished transfers, and if yes, free their handles */
 checkHandles: func {
-    "Check my handles!" println()
+//    "Check my handles!" println()
     queued := 0
     msg: MultiMsg*
     toRemove := ArrayList<Curl> new()
@@ -48,6 +48,11 @@ checkHandles: func {
         "Removing handle %s!" printfln(effUrl toString())
         multi removeHandle(handle)
         handle cleanup()
+    }
+
+    // No streams left? Exit!
+    if(remaining == 0) {
+        exit(0)
     }
 }
 
@@ -130,16 +135,8 @@ timeoutExpired: func {
     checkHandles()
 }
 
-main: func (args: ArrayList<String>) {
-
-    if(args size <= 1) {
-        "Usage: %s URL\n" printfln(args[0])
-        exit(0)
-    }
-    url := args get(1)
-
-    fName := "tmp.html"
-    fw := FileWriter new(fName)
+addRequest: func (url: String, i: Int) {
+    fw := FileWriter new("tmp%d.html" format(i))
 
     handle := Curl new()
     handle setOpt(CurlOpt url, url toCString())
@@ -150,13 +147,21 @@ main: func (args: ArrayList<String>) {
     multi setOpt(MultiOpt timerFunction, multiTimeoutCb)
 
     multi addHandle(handle)
-   
+}
+
+main: func (args: ArrayList<String>) {
+
+    if(args size <= 1) {
+        "Usage: %s URL\n" printfln(args[0])
+        exit(0)
+    }
+  
+    for(i in 1..args size) {
+        addRequest(args[i], i)
+    }
+
     // just let the timeout expire now, once, so we can call `socketAction`.
     zloop addTimer(0, 1, timeoutCb)
 
     zloop start()
-    
-//    handle cleanup() // cleaned automagically!
-    fw close()
-
 }
