@@ -1,4 +1,4 @@
-import io/[Writer, BufferWriter]
+import io/[Reader, Writer, BufferWriter, StringReader]
 import structs/[HashMap, List, ArrayList]
 
 import curl/Curl
@@ -61,11 +61,16 @@ FormData: class {
 HTTPRequest: class {
     curl: Curl
     writer: Writer
+    reader: Reader
     formData: FormData = null
     headers: List<String>
 
     defaultWriteFunction: static func (buffer: Pointer, size, nmemb: SizeT, self: HTTPRequest) {
         self writer write(buffer, nmemb)
+    }
+
+    defaultReadFunction: static func (buffer: Pointer, size, nmemb: SizeT, self: HTTPRequest) -> SizeT {
+        self reader read(buffer, size, nmemb)
     }
 
     init: func (url: String, =writer) {
@@ -85,12 +90,28 @@ HTTPRequest: class {
         init(url, BufferWriter new())
     }
 
+    setReader: func (=reader) {
+        curl setOpt(CurlOpt readData, this)
+        curl setOpt(CurlOpt readFunction, defaultReadFunction)
+    }
+
     /**
      * Make this a POST request, and set its content
      */
     post: func ~fullContent (content: String) {
         curl setOpt(CurlOpt post, true)
         curl setOpt(CurlOpt postFields, content toCString())
+    }
+
+    /** Make it a PUT request! */
+    put: func ~string (data: String) {
+        curl setOpt(CurlOpt upload, true)
+        curl setOpt(CurlOpt inFileSize, data size) // TODO: unicode stuff
+        setReader(StringReader new(data))
+    }
+
+    delete: func {
+        curl setOpt(CurlOpt customRequest, "DELETE" toCString())
     }
 
     header: func (header: String) {

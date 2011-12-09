@@ -134,11 +134,16 @@ CurlOpt: cover {
     post:                    extern(CURLOPT_POST)                       static CURLoption
     postFields:              extern(CURLOPT_POSTFIELDS)                 static CURLoption
 
+    /* put options*/
+    upload:                    extern(CURLOPT_UPLOAD)                       static CURLoption
+    inFileSize:                    extern(CURLOPT_INFILESIZE)                       static CURLoption
+
     /* form/multipart options */
     httpPost:                extern(CURLOPT_HTTPPOST)                   static CURLoption   
     
     /* HTTP options */
     httpHeader:              extern(CURLOPT_HTTPHEADER)                 static CURLoption
+    customRequest:           extern(CURLOPT_CUSTOMREQUEST)              static CURLoption
 }
 
 /**
