@@ -1,5 +1,6 @@
 before_install:
-  - sudo apt-get -y -qq install curl make libgc-dev libcurl4-gnutls-dev
+  - sudo apt-get -y -qq update
+  - sudo apt-get -y -qq install curl make libgc-dev libcurl3-gnutls-dev
   - git clone --depth=1 git://github.com/nddrylliog/rock.git 
   - (cd rock && make -s quick-rescue)
   - export PATH=$PATH:$PWD/rock/bin
