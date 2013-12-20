@@ -1,3 +1,8 @@
 samples/wget-like
 samples/wget-like-highlevel
+samples/multi-wget-zmq
+*.exe
+rock_tmp
 .libs
+.sam-cache
+*.dSYM

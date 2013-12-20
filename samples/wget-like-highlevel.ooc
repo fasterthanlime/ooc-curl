@@ -21,7 +21,7 @@ main: func (args: ArrayList<String>) {
     }
     handle perform()
     if(downloadString)
-        handle getString() println()
+        handle getString() print()
     else
         handle writer close()
 }

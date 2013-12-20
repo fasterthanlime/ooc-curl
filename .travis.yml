@@ -1,0 +1,12 @@
+before_install:
+  - sudo apt-get -y -qq install curl make libgc-dev curl-dev
+  - git clone --depth=1 git://github.com/nddrylliog/rock.git 
+  - (cd rock && make -s quick-rescue)
+  - export PATH=$PATH:$PWD/rock/bin
+
+script:
+  - export OOC_LIBS=$PWD
+  - cd samples
+  - mkdir -p travis
+  - rock -v wget-like.ooc -o=travis/test && travis/test http://example.org/
+  - rock -v wget-like-highlevel.ooc -o=travis/test && travis/test http://example.org/
