@@ -157,7 +157,7 @@ HTTPRequest: class {
     }
 
     getString: func -> String {
-        writer as BufferWriter buffer() toString()
+        writer as BufferWriter buffer toString()
     }
 
     /* methods for later (after perform) */
